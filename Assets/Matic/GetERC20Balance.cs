@@ -30,6 +30,6 @@ public class GetERC20Balance : MonoBehaviour
     public static async Task<System.Numerics.BigInteger> BalanceOfERC20()
     {
         var matic = Settings.GetMatic();
-        return await matic.BalanceOfERC20(Settings.FROM_ADDRESS, Settings.MATIC_TEST_TOKEN);
+        return await matic.BalanceOfERC20(Settings.FROM_ADDRESS, Settings.ROPSTEN_TEST_TOKEN, true);
     }
 }

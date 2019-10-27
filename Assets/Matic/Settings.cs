@@ -11,7 +11,7 @@ public static class Settings
     public static string WATCHER_URL = "https://ropsten-watcher2.api.matic.network/api/v1"; // Backend service which syncs the Matic Plasma contract events on Ethereum mainchain to a MySQL database which we use for faster querying. This comes in handy especially for listening to asset deposits on the Plasma contract.
     public static string ROOTWETH_ADDRESS = "0x421dc9053cb4b51a7ec07b60c2bbb3ec3cfe050b";  // This is a wrapped ETH ERC20 contract address so that we can support ETH deposits to the sidechain
     public static string MATICWETH_ADDRESS = "0x31074c34a757a4b9FC45169C58068F43B717b2D0"; // The corresponding wrapped ETH ERC20 contract address on the Matic chain
-    public static string PRIVATE_KEY = "C9B85FC7CA3B9ED8DBB469D8DCC3B00CD321D6A994F1C4FA715D23C0E50C3099"; // A sample private key prefix with `0x`
+    public static string PRIVATE_KEY = "0xC9B85FC7CA3B9ED8DBB469D8DCC3B00CD321D6A994F1C4FA715D23C0E50C3099"; // A sample private key prefix with `0x`
     public static string FROM_ADDRESS = "0xfd9f925fB319a261E828e646FD06267D0d503845";// Your address
     public static string TO_ADDRESS = "0x787577296807D82FFfF4f088622Ec5A5479957c2";// receipent address
     public static string ROPSTEN_TEST_TOKEN = "0x70459e550254b9d3520a56ee95b78ee4f2dbd846"; // Contract for ERC20 in Ropsten
