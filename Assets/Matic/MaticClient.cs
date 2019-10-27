@@ -11,16 +11,12 @@ namespace Assets.Matic
 {
     public class MaticClient : MonoBehaviour
     {
-        public static MaticClient instance;
-        public IMatic matic;
-        public MaticClient()
-        {
-            instance = this;
-            matic = Settings.GetMatic();
-        }
 
-        public async Task<BigInteger> GetERC20Balance()
+        public async Task<System.Numerics.BigInteger> BalanceOfERC20()
         {
+            Debug.Log("Returning");
+            var matic = Settings.GetMatic();
+
             return await matic.BalanceOfERC20(Settings.FROM_ADDRESS, Settings.ROPSTEN_TEST_TOKEN, true);
         }
     }

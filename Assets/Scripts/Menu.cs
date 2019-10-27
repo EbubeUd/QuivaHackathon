@@ -40,6 +40,7 @@ namespace Assets.Scripts
                     PowerUpPanel.SetActive(true);
                     break;
                 case Enums.Pages.Tutorial:
+                    HomePanel.SetActive(true);
                     TutorialPanel.SetActive(true);
                     break;
             }

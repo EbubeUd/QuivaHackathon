@@ -37,7 +37,9 @@ public class GameSettings : MonoBehaviour {
         Music.Stop();
         SettingsButton.onClick.AddListener(delegate () { DisplaySettings(); });
         SoundButton.onClick.AddListener(delegate () { ToggleSound (); });
+        SoundButtonInGame.onClick.AddListener(delegate () { ToggleSound (); });
         MusicButton.onClick.AddListener(delegate () { ToggleMusic(); });
+        MusicButtonInGame.onClick.AddListener(delegate () { ToggleMusic(); });
         HomeButton.onClick.AddListener(delegate () { GoHome(); });
 
         //Get the settings
@@ -110,7 +112,10 @@ public class GameSettings : MonoBehaviour {
 
     void GoHome()
     {
-
+        IsDroppedDown = true;
+        if (IsInGameSession) InGameSettingsAnimation.SetBool("IsHidden", true);
+        if (!IsInGameSession) SettingsAnimation.SetBool("IsHidden", true);
+        Menu.instance.SwitchPage(Enums.Pages.Home);
     }
 
     void PlayMusic(bool shouldplay = true)

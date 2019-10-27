@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 using System.Threading.Tasks;
-
+using System.Numerics;
 
 public class GetERC20Balance : MonoBehaviour
 {
@@ -23,11 +23,11 @@ public class GetERC20Balance : MonoBehaviour
     async void UpdateBalance() {
         var balance = await BalanceOfERC20();
         Debug.Log(balance);
-        Debug.Log($"I have {balance} Wei TEST Tokens");
-        tokenBalanceText.text = balance.ToString() + "Wei";
+        BigInteger division = BigInteger.Divide(balance, new BigInteger(1000000000000000000));
+        tokenBalanceText.text = division.ToString() + "\n TEST";
     }
 
-    public static async Task<System.Numerics.BigInteger> BalanceOfERC20()
+    public static async Task<BigInteger> BalanceOfERC20()
     {
         var matic = Settings.GetMatic();
         return await matic.BalanceOfERC20(Settings.FROM_ADDRESS, Settings.ROPSTEN_TEST_TOKEN, true);
