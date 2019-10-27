@@ -6,9 +6,10 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Numerics;
-using System.Threading.Tasks;
+
 using UnityEngine;
 using UnityEngine.UI;
+
 
 namespace Assets.Scripts
 {
@@ -22,9 +23,9 @@ namespace Assets.Scripts
         private void Start()
         {
             CancelBtn.onClick.AddListener(delegate { ClosePowerUp(); });
-            Arrow1Btn.onClick.AddListener(delegate { PurchaseOrEquipArrowAsync(1).GetAwaiter().GetResult(); });
-            Arrow2Btn.onClick.AddListener(delegate { PurchaseOrEquipArrowAsync(2).GetAwaiter().GetResult(); });
-            CancelBtn.onClick.AddListener(delegate { PurchaseOrEquipArrowAsync(3).GetAwaiter().GetResult(); });
+           // Arrow1Btn.onClick.AddListener( );
+            Arrow2Btn.onClick.AddListener(PurchaseOrEquipArrowAsyn2);
+            //Arrow3Btn.onClick.AddListener();
         }
 
         private void ClosePowerUp()
@@ -33,30 +34,60 @@ namespace Assets.Scripts
         }
 
 
-         async Task PurchaseOrEquipArrowAsync(int arrowIndex)
+        async void PurchaseOrEquipArrowAsyn2()
         {
-            if (arrowIndex == 1)
+            int arrowIndex = 2;
+            //Get the players List of Arrows
+            string playerdetails = PlayerPrefs.GetString("playerDetails");
+            if (String.IsNullOrEmpty(playerdetails)) return;
+            PlayerDetails playerDetails = JsonConvert.DeserializeObject<PlayerDetails>(playerdetails);
+            if (playerDetails.Arrows == null) playerDetails.Arrows = new List<int>();
+            if (playerDetails.Arrows.Contains(arrowIndex))
             {
-                EquipArrow(1);
+                EquipArrow(arrowIndex);
             }
-            Arrow arrow = GetArrow(arrowIndex);
-            var balance = await BalanceOfERC20();
-            int division = (int)BigInteger.Divide(balance, new BigInteger(1000000000000000000));
-            if(division < arrow.Price)
+            else
             {
-                Debug.Log("Insufficient Funds!");
-                return;
+                Arrow arrow = GetArrow(arrowIndex);
+                
+                //Get the Balance of the player
+                var matic = Settings.GetMatic();
+                var from = Settings.FROM_ADDRESS;
+                var token = Settings.MATIC_TEST_TOKEN;
+
+                var to = Settings.TO_ADDRESS;
+                var amount = arrow.Price;
+
+                await matic.TransferTokens(from, token, to, amount);
+                Debug.Log($"TransferTokens finished");
+
+                GetERC20Balance.instance.UpdateBalance();
+
+                EquipArrow(arrowIndex);
             }
-            //Get the Balance of the player
-            arrow.Price = new BigInteger(arrowIndex);
+            
         
         }
 
         private void EquipArrow(int index)
         {
             //Get the PlayerDetails
+            PlayerDetails playerDetails = new PlayerDetails();
             string playerdetailsString = PlayerPrefs.GetString("playerDetails");
-            if (String.IsNullOrEmpty(playerdetailsString)) playerdetailsString = JsonConvert.SerializeObject(new PlayerDetails() { arrow = 1, Address = "", PrivateKey ="" });
+            if (String.IsNullOrEmpty(playerdetailsString))
+            {
+                playerDetails.ActiveArrow = index;
+                if(!playerDetails.Arrows.Contains(index)) playerDetails.Arrows.Add(index);
+            }
+            else
+            {
+                playerDetails = JsonConvert.DeserializeObject<PlayerDetails>(playerdetailsString);
+                playerDetails.ActiveArrow = index;
+                if (playerDetails.Arrows == null) playerDetails.Arrows = new List<int>();
+                if (!playerDetails.Arrows.Contains(index)) playerDetails.Arrows.Add(index);
+            }
+
+            playerdetailsString = JsonConvert.SerializeObject(playerDetails);
             PlayerPrefs.SetString("playerDetails", playerdetailsString);
         }
 
@@ -72,19 +103,14 @@ namespace Assets.Scripts
                     arrow.Price = 0;
                     break;
                 case 2:
-                    arrow.Price = 20;
+                    arrow.Price = 100000000000000000;
                     break;
                 case 3:
-                    arrow.Price = 25;
+                    arrow.Price = 1000000000000000000;
                     break;
             }
             return arrow;
         }
 
-        public static async Task<BigInteger> BalanceOfERC20()
-        {
-            var matic = Settings.GetMatic();
-            return await matic.BalanceOfERC20(Settings.FROM_ADDRESS, Settings.ROPSTEN_TEST_TOKEN, true);
-        }
     }
 }

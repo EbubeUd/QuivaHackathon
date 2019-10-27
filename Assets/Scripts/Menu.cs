@@ -16,11 +16,15 @@ namespace Assets.Scripts
         public GameObject PowerUpPanel;
         public AudioSource BackgroundMusic;
         public static Menu instance;
+        private Vector2 scene;
 
         void Start()
         {
             if (instance == null) instance = this;
- 
+
+            //scene = Camera.main.ScreenToWorldPoint(new Vector3(Screen.height,Screen.width, Camera.main.transform.position.z));
+
+            //Debug.Log(scene);
         }
 
         public void SwitchPage(Enums.Pages page)
