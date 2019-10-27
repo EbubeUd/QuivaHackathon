@@ -19,7 +19,9 @@ public class GameSettings : MonoBehaviour {
     bool IsSoundOn;
     bool IsMusicOn;
     bool IsDroppedDown = true;
+    public bool IsInGameSession;  //Should be true while Game play is on
     public Animator SettingsAnimation;
+    public Animator InGameSettingsAnimation;
     
 
     public GameObject DropDown;
@@ -29,13 +31,13 @@ public class GameSettings : MonoBehaviour {
         SettingsButton.onClick.AddListener(delegate () { DisplaySettings(); });
         SoundButton.onClick.AddListener(delegate () { ToggleSound (); });
         MusicButton.onClick.AddListener(delegate () { ToggleMusic(); });
-        //HomeButton.onClick.AddListener(delegate () { GoHome(); });
-
+        HomeButton.onClick.AddListener(delegate () { GoHome(); });
     }
 
     void DisplaySettings()
     {
         IsDroppedDown = !IsDroppedDown;
+        if (IsInGameSession) InGameSettingsAnimation.SetBool("IsHidden", IsDroppedDown);
         SettingsAnimation.SetBool("IsHidden", IsDroppedDown);
     }
 
