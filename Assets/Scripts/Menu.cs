@@ -17,14 +17,13 @@ namespace Assets.Scripts
         public AudioSource BackgroundMusic;
         public static Menu instance;
         private Vector2 scene;
+        public Image SettingsCoverImage;
 
         void Start()
         {
             if (instance == null) instance = this;
 
-            //scene = Camera.main.ScreenToWorldPoint(new Vector3(Screen.height,Screen.width, Camera.main.transform.position.z));
-
-            //Debug.Log(scene);
+            
         }
 
         public void SwitchPage(Enums.Pages page)
@@ -33,17 +32,23 @@ namespace Assets.Scripts
             switch (page)
             {
                 case Enums.Pages.Home:
+                    SettingsCoverImage.gameObject.SetActive(true);
+
                     HomePanel.SetActive(true);
+
                     break;
                 case Enums.Pages.Score:
+                    SettingsCoverImage.gameObject.SetActive(false);
                     HomePanel.SetActive(true);
                     ScorePanel.SetActive(true);
                     break;
                 case Enums.Pages.Shop:
+                    SettingsCoverImage.gameObject.SetActive(false);
                     HomePanel.SetActive(true);
                     PowerUpPanel.SetActive(true);
                     break;
                 case Enums.Pages.Tutorial:
+                    SettingsCoverImage.gameObject.SetActive(false);
                     HomePanel.SetActive(true);
                     TutorialPanel.SetActive(true);
                     break;

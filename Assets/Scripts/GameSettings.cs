@@ -44,6 +44,7 @@ public class GameSettings : MonoBehaviour {
 
         //Get the settings
         string settingsStr = PlayerPrefs.GetString("settings");
+
         Debug.Log(settingsStr);
         if (String.IsNullOrEmpty(settingsStr) || settingsStr == "{}")
         {
@@ -64,6 +65,7 @@ public class GameSettings : MonoBehaviour {
 
     void DisplaySettings()
     {
+        Menu.instance.SettingsCoverImage.gameObject.SetActive(true);
         IsDroppedDown = !IsDroppedDown;
         if (IsInGameSession) InGameSettingsAnimation.SetBool("IsHidden", IsDroppedDown);
         if(!IsInGameSession) SettingsAnimation.SetBool("IsHidden", IsDroppedDown);

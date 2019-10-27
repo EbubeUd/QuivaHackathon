@@ -23,9 +23,9 @@ namespace Assets.Scripts
         private void Start()
         {
             CancelBtn.onClick.AddListener(delegate { ClosePowerUp(); });
-           // Arrow1Btn.onClick.AddListener( );
+            Arrow1Btn.onClick.AddListener(delegate { EquipArrow(1); });
             Arrow2Btn.onClick.AddListener(PurchaseOrEquipArrowAsyn2);
-            //Arrow3Btn.onClick.AddListener();
+            Arrow3Btn.onClick.AddListener(PurchaseOrEquipArrowAsyn3);
         }
 
         private void ClosePowerUp()
@@ -69,6 +69,42 @@ namespace Assets.Scripts
         
         }
 
+
+        async void PurchaseOrEquipArrowAsyn3()
+        {
+            int arrowIndex = 3;
+            //Get the players List of Arrows
+            string playerdetails = PlayerPrefs.GetString("playerDetails");
+            if (String.IsNullOrEmpty(playerdetails)) return;
+            PlayerDetails playerDetails = JsonConvert.DeserializeObject<PlayerDetails>(playerdetails);
+            if (playerDetails.Arrows == null) playerDetails.Arrows = new List<int>();
+            if (playerDetails.Arrows.Contains(arrowIndex))
+            {
+                EquipArrow(arrowIndex);
+            }
+            else
+            {
+                Arrow arrow = GetArrow(arrowIndex);
+
+                //Get the Balance of the player
+                var matic = Settings.GetMatic();
+                var from = Settings.FROM_ADDRESS;
+                var token = Settings.MATIC_TEST_TOKEN;
+
+                var to = Settings.TO_ADDRESS;
+                var amount = arrow.Price;
+
+                await matic.TransferTokens(from, token, to, amount);
+                Debug.Log($"TransferTokens finished");
+
+                GetERC20Balance.instance.UpdateBalance();
+
+                EquipArrow(arrowIndex);
+            }
+
+
+        }
+
         private void EquipArrow(int index)
         {
             //Get the PlayerDetails
@@ -89,6 +125,8 @@ namespace Assets.Scripts
 
             playerdetailsString = JsonConvert.SerializeObject(playerDetails);
             PlayerPrefs.SetString("playerDetails", playerdetailsString);
+
+            gameObject.SetActive(false);
         }
 
 
