@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Assets.Models;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -12,13 +13,14 @@ namespace Assets.Scripts
         public GameObject HomePanel;
         public GameObject TutorialPanel;
         public GameObject ScorePanel;
-        public GameObject ShopPanel;
-
+        public GameObject PowerUpPanel;
+        public AudioSource BackgroundMusic;
         public static Menu instance;
 
         void Start()
         {
             if (instance == null) instance = this;
+ 
         }
 
         public void SwitchPage(Enums.Pages page)
@@ -30,10 +32,12 @@ namespace Assets.Scripts
                     HomePanel.SetActive(true);
                     break;
                 case Enums.Pages.Score:
+                    HomePanel.SetActive(true);
                     ScorePanel.SetActive(true);
                     break;
                 case Enums.Pages.Shop:
-                    ShopPanel.SetActive(true);
+                    HomePanel.SetActive(true);
+                    PowerUpPanel.SetActive(true);
                     break;
                 case Enums.Pages.Tutorial:
                     TutorialPanel.SetActive(true);
@@ -46,7 +50,9 @@ namespace Assets.Scripts
             HomePanel.SetActive(false);
             TutorialPanel.SetActive(false);
             ScorePanel.SetActive(false);
-            ShopPanel.SetActive(false);
+            PowerUpPanel.SetActive(false);
         }
+
+
     }
 }
