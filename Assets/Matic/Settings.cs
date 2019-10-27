@@ -3,7 +3,7 @@
 public static class Settings
 {
     public static string MATIC_PROVIDER = "https://testnet2.matic.network"; // This is the MATIC testnet RPC
-    public static string PARENT_PROVIDER = "https://ropsten.infura.io/v3/70645f042c3a409599c60f96f6dd9fbc"; // This is the Ropsten testnet RPC
+    public static string PARENT_PROVIDER = "https://ropsten.infura.io/v3/07cfeed6a3ba46e3b061705e01fc1d76"; // This is the Ropsten testnet RPC
     public static string ROOTCHAIN_ADDRESS = "0x60e2b19b9a87a3f37827f2c8c8306be718a5f9b4"; // The address for the main Plasma contract in  Ropsten testnet
     public static string WITHDRAWMANAGER_ADDRESS = "0x4ef2b60cdd4611fa0bc815792acc14de4c158d22"; // An address for the WithdrawManager contract on Ropsten testnet
     public static string DEPOSITMANAGER_ADDRESS = "0x4072fab2a132bf98207cbfcd2c341adb904a67e9";  // An address for a DepositManager contract in Ropsten testnet

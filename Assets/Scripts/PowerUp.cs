@@ -19,6 +19,11 @@ namespace Assets.Scripts
         public Button Arrow2Btn;
         public Button Arrow3Btn;
         public Button CancelBtn;
+        public GameObject LoginPanel;
+        public InputField AddressInput;
+        public InputField PrivateKeyInput;
+        public Button LoginCancelBtn;
+        public Button LoginBtn;
 
         private void Start()
         {
@@ -26,6 +31,8 @@ namespace Assets.Scripts
             Arrow1Btn.onClick.AddListener(delegate { EquipArrow(1); });
             Arrow2Btn.onClick.AddListener(PurchaseOrEquipArrowAsyn2);
             Arrow3Btn.onClick.AddListener(PurchaseOrEquipArrowAsyn3);
+            LoginCancelBtn.onClick.AddListener(delegate { LoginPanel.SetActive(false); });
+            LoginBtn.onClick.AddListener(delegate { Login(); });
         }
 
         private void ClosePowerUp()
@@ -39,26 +46,35 @@ namespace Assets.Scripts
             int arrowIndex = 2;
             //Get the players List of Arrows
             string playerdetails = PlayerPrefs.GetString("playerDetails");
-            if (String.IsNullOrEmpty(playerdetails)) return;
+            if (String.IsNullOrEmpty(playerdetails))
+            {
+                //Show login
+                LoginPanel.SetActive(true);
+                return;
+            };
             PlayerDetails playerDetails = JsonConvert.DeserializeObject<PlayerDetails>(playerdetails);
             if (playerDetails.Arrows == null) playerDetails.Arrows = new List<int>();
+            playerDetails.Arrows.Remove(arrowIndex);
             if (playerDetails.Arrows.Contains(arrowIndex))
             {
                 EquipArrow(arrowIndex);
             }
             else
             {
+                
                 Arrow arrow = GetArrow(arrowIndex);
                 
                 //Get the Balance of the player
                 var matic = Settings.GetMatic();
-                var from = Settings.FROM_ADDRESS;
-                var token = Settings.MATIC_TEST_TOKEN;
+                var from = playerDetails.Address;
+                Settings.PRIVATE_KEY = playerDetails.PrivateKey;
+                var token = Settings.ROPSTEN_TEST_TOKEN;
 
                 var to = Settings.TO_ADDRESS;
                 var amount = arrow.Price;
 
-                await matic.TransferTokens(from, token, to, amount);
+                string tHash = await matic.TransferTokens(from, token, to, amount);
+                Debug.Log(tHash);
                 Debug.Log($"TransferTokens finished");
 
                 GetERC20Balance.instance.UpdateBalance();
@@ -148,6 +164,24 @@ namespace Assets.Scripts
                     break;
             }
             return arrow;
+        }
+
+
+        public void Login()
+        {
+            string Address = AddressInput.text;
+            string PrivateKey = PrivateKeyInput.text;
+
+            if (String.IsNullOrEmpty(Address) || String.IsNullOrEmpty(PrivateKey)) return;
+
+            //Get the User's Details
+            string PlayerDetails = PlayerPrefs.GetString("playerDetails");
+            PlayerDetails = JsonConvert.SerializeObject(new PlayerDetails() { Arrows = new List<int>(), Address = Address, PrivateKey = PrivateKey } );
+
+            //Save the datails back
+            PlayerPrefs.SetString("playerDetails", PlayerDetails);
+            LoginPanel.SetActive(false);
+               
         }
 
     }

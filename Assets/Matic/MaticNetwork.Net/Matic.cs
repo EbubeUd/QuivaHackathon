@@ -392,15 +392,15 @@ namespace MaticNetwork.Net
             gasPrice = gasPrice.ToUlong() == 0 ? null : gasPrice;
             // Console.WriteLine($"gasPrice: {gasPrice}");
             // estimate gas
-            // var gas = new HexBigInteger(170000);
+             var gas = new HexBigInteger(170000);
             // var gas = await function.EstimateGasAsync(from, null, value, functionInput);
             // Console.WriteLine($"gas: {gas}");
             // send transaction
             //var receiptTxn = await function.SendTransactionAndWaitForReceiptAsync(from, gas, gasPrice, value, null, functionInput);
 
-            var receiptTxn = await function.SendTransactionAndWaitForReceiptAsync(from, new HexBigInteger(23000), gasPrice, value, null, Settings.TO_ADDRESS, new BigInteger(100000000));
-            // var hash = await function.SendTransactionAsync(from, gas, gasPrice, value, functionInput);
-            return receiptTxn.TransactionHash;
+            //var receiptTxn = await function.SendTransactionAndWaitForReceiptAsync(from, new HexBigInteger(30000), gasPrice, value, null, Settings.TO_ADDRESS, new BigInteger(100000000));
+             var hash = await function.SendTransactionAsync(from, gas, gasPrice, value, functionInput);
+            return hash;
         }
 
         private Contract _GetERC721TokenContract(string token, IWeb3 web3Object)
